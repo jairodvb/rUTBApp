@@ -294,36 +294,9 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                 PrintWriter out = new PrintWriter(connection.getOutputStream());
                 out.print(urlParameters);
                 out.close();
-
-                //Leer la respuesta del servidor
-                try {
-                    BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
-                    StringBuilder sb = new StringBuilder();
-                    String output;
-                    while ((output = br.readLine()) != null) {
-                        sb.append(output);
-                    }
-                    if(respuestaServidor==200) {
-                        //SharedPreferences settings = getSharedPreferences("TokenStorage", 0);
-                        //Log.e("onPostExecute", "TokenSaved:" + settings.getString("token", ""));
-                        JSONObject reader = new JSONObject(sb.toString());
-                        JSONObject res  = reader.getJSONObject("");
-                        String token = res.getString("token");
-                        Log.i("respuesta",connection.getContent().toString());
-                        Log.e("Respuesta JSON",token);
-                    }
-                   /* guardar token y el usuario en la app
-                    SharedPreferences.Editor editor = MainActivity.settings.edit();
-                    editor.putString("token", sb.toString());
-                    editor.putString("id", mTeacherID);*/
-
-                    // Commit the edits!
-                    //editor.commit();
-
-
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+                Log.i("Respuesta Token","Previa entrada");
+                Log.i("Respuesta",String.valueOf(connection.getResponseCode()));
+                Log.i("Respuesta Completa",connection.getContent().toString());
 
                 //return response.toString();
                 respuestaServidor=connection.getResponseCode();
