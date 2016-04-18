@@ -1,4 +1,5 @@
 package com.example.nicolasagudelo.rutb;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -32,8 +33,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -82,7 +81,6 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        // populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mUserNameView = (EditText) findViewById(R.id.Codigo);
@@ -105,58 +103,13 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         System.out.println("Las 4 primeras letras son: " + usuarioAdministrador);
         if ("t000".equals(usuarioAdministrador) || "T000".equals(usuarioAdministrador)){
             final String url="http://raoapi.utbvirtual.edu.co:8082/token";
-            if (isEmailValid(email) && isPasswordValid(password)) {
+            if (isPasswordValid(password)) {
 
                 new AsyncHttpTask().execute(url, email, password);
             }
         }else Toast.makeText(Login.this,"Ingresó un usuario invalido dentro de la universidad, intente de nuevo",Toast.LENGTH_SHORT).show();
 
     }
-
-
-    /**private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }*/
-
-   /** private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }*/
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    /**@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }*/
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -294,13 +247,32 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                 PrintWriter out = new PrintWriter(connection.getOutputStream());
                 out.print(urlParameters);
                 out.close();
-                Log.i("Respuesta Token","Previa entrada");
-                Log.i("Respuesta",String.valueOf(connection.getResponseCode()));
-                Log.i("Respuesta Completa",connection.getContent().toString());
+
+                //Leer la respuesta del servidor
+                try {
+                    BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
+                    StringBuilder sb = new StringBuilder();
+                    String output;
+                    while ((output = br.readLine()) != null) {
+                        sb.append(output);
+                    }
+
+                   /*guardar token y el usuario en la app
+                    SharedPreferences.Editor editor = MainActivity.settings.edit();
+                    editor.putString("token", sb.toString());
+                    editor.putString("id", );*/
+
+                    // Commit the edits!
+                    //editor.commit();
+
+                    Log.e("Respuesta",sb.toString());
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
 
                 //return response.toString();
                 respuestaServidor=connection.getResponseCode();
-
+                Log.e("Respuesta", "ID = "+connection.getResponseCode());
                 return 1;
 
             } catch (Exception e) {
