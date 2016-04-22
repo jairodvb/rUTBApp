@@ -44,8 +44,8 @@ public class MapsActivity extends FragmentActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-        String imgSett = getDefaults("TokenGuardado",getApplicationContext());
-        System.out.println("EXITO: " + imgSett);
+        String tokenGuardado = getDefaults("TokenGuardado",getApplicationContext());
+        System.out.println("EXITO: " + tokenGuardado);
     }
 
     public static void setDefaults(String key, String value, Context context) {

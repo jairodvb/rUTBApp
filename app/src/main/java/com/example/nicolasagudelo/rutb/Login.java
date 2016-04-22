@@ -83,6 +83,11 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getDefaults("TokenGuardado",getApplicationContext()).length()>0){
+            Intent login_inmediato = new Intent();
+            login_inmediato.setClass(getApplicationContext(), MapsActivity.class);
+            startActivity(login_inmediato);
+        }
         setContentView(R.layout.activity_login);
         // Set up the login form.
 
